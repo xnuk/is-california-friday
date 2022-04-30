@@ -1,0 +1,59 @@
+<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><style>*{margin:0;padding:0;font-family:sans-serif;font-variant-numeric:tabular-nums}main{display:flex;flex-flow:column;align-items:center;justify-content:center;inset:0;position:absolute}h1{font-size:10rem;text-transform:uppercase}h2{font-size:2rem;font-weight:normal}span{font-size:1rem}img{height:240px;width:auto}footer{position:absolute;inset:0;top:auto;text-align:center;padding-bottom:.5rem}a{text-decoration:none}a:hover{text-decoration:underline}</style><script type="module">// deno-fmt-ignore-file
+// deno-lint-ignore-file
+// This code was bundled using `deno bundle` and it's not recommended to edit it manually
+const timeZone = 'US/Pacific';
+const weekdayFormat = Intl.DateTimeFormat('en-US', {
+timeZone,
+weekday: 'long'
+});
+const dateFormat = Intl.DateTimeFormat(undefined, {
+timeZone,
+dateStyle: 'full'
+});
+const timeFormat = Intl.DateTimeFormat(undefined, {
+timeZone,
+timeStyle: 'full'
+});
+const isFriday = (date)=>weekdayFormat.format(date).startsWith('Fri')
+;
+const dateString = dateFormat.format.bind(dateFormat);
+const timeString = timeFormat.format.bind(timeFormat);
+const uninit = Symbol();
+const onDifference = (func, listener)=>{
+let before = uninit;
+return (...args)=>{
+const val = func(...args);
+if (before === uninit || before !== val) {
+before = val;
+listener(val);
+}
+};
+};
+const join = (...funcs)=>(...args)=>funcs.map((f)=>f(...args)
+)
+;
+const listen = (document)=>{
+const img = new Image(480, 480);
+const h1 = document.createElement('h1');
+const h2 = document.createElement('h2');
+const span = document.createElement('span');
+const listener = join(onDifference(isFriday, (isFriday1)=>{
+if (isFriday1) {
+h1.textContent = 'Yes';
+img.src = './yes.png';
+img.alt = 'A cop and two nurses are looking at you and saying: Today is Friday in California.';
+} else {
+h1.textContent = 'No';
+img.src = './no.png';
+img.alt = 'Something is hidden under a white blanket and a nurse is looking elsewhere.';
+}
+}), onDifference(dateString, (date)=>h2.textContent = date
+), onDifference(timeString, (time)=>span.textContent = time
+));
+listener(Date.now());
+document.getElementsByTagName('main')[0].append(img, h1, h2, span);
+return setInterval(()=>listener(Date.now())
+, 1000);
+};
+listen(document);
+</script><main><footer>Kudos to <a href="https://twitter.com/fridaypacific">@fridaypacific</a></footer></main>

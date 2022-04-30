@@ -1,0 +1,5 @@
+{
+	"tasks": {
+		"build": "deno -q run --unstable --allow-read=. --allow-write=./index.html ./build.ts"
+	}
+}
