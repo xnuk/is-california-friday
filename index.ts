@@ -78,12 +78,12 @@ const listen = (document: Document) => {
 		onDifference(isFriday, isFriday => {
 			if (isFriday) {
 				h1.textContent = 'Yes'
-				img.src = './yes.png'
+				img.src = './yes.jpg'
 				img.alt =
 					'A cop and two nurses are looking at you and saying: Today is Friday in California.'
 			} else {
 				h1.textContent = 'No'
-				img.src = './no.png'
+				img.src = './no.jpg'
 				img.alt =
 					'Something is hidden under a white blanket and a nurse is looking elsewhere.'
 			}
